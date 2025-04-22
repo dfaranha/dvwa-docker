@@ -10,7 +10,7 @@ USE ${db_name};
 CREATE TABLE users (user_id int(6),first_name varchar(15),last_name varchar(15), user varchar(15), password varchar(32),avatar varchar(70), last_login TIMESTAMP, failed_login INT(3), PRIMARY KEY (user_id));
 
 INSERT INTO users VALUES
-	('1','admin','admin','admin',MD5('password'),'/var/www/html/config/hackable/users/admin.jpg', NOW(), '0'),
+	('1','admin','admin','syssec',MD5('0b5cUr1ty'),'/var/www/html/config/hackable/users/admin.jpg', NOW(), '0'),
 	('2','Gordon','Brown','gordonb',MD5('abc123'),'/var/www/html/config/hackable/users/gordonb.jpg', NOW(), '0'),
 	('3','Hack','Me','1337',MD5('charley'),'/var/www/html/config/hackable/users/1337.jpg', NOW(), '0'),
 	('4','Pablo','Picasso','pablo',MD5('letmein'),'/var/www/html/config/hackable/users/pablo.jpg', NOW(), '0'),
