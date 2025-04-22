@@ -31,7 +31,7 @@ RUN set -eux \
 # Get Adminer
 RUN set -eux \
 	&& URL="$( \
-		curl -sS --fail -k https://www.adminer.org/ \
+		curl -sS --fail -k https://www.adminer.org/en/ \
 		| grep -Eo 'https://github.com/vrana/adminer/releases/download/v[.0-9]+/adminer-[.0-9]+-mysql-en.php' \
 	)" \
 	&& curl -sS --fail -k -L "${URL}" > /adminer.php
@@ -68,11 +68,16 @@ RUN set -eux \
 	&& apt-get update \
 	&& apt-get install -y --no-install-recommends --no-install-suggests \
 		iputils-ping \
-		netcat \
+		netcat-traditional \
 		python3 \
 		strace \
 		sudo \
-		telnet \
+		vim \
+		nano \
+		wget \
+		git \
+		certbot \
+		python3-certbot-apache \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/*
 
@@ -126,5 +131,15 @@ RUN set -eux \
     && touch /var/www/html/external/phpids/0.6/lib/IDS/tmp/phpids_log.txt \
 	&& chmod 0664 /var/www/html/external/phpids/0.6/lib/IDS/tmp/phpids_log.txt
 
-expose 80
-CMD ["/entrypoint.sh"]
++RUN a2enmod rewrite
++RUN a2enmod ssl
++COPY 000-default.conf /etc/apache2/sites-available
++COPY default-ssl.conf /etc/apache2/sites-available
++COPY default-ssl.conf /etc/apache2/sites-enabled/default-ssl.conf
++COPY *.pem /etc/apache2
++COPY options-ssl.conf /etc/apache2
++RUN apache2ctl configtest
++RUN wget https://raw.githubusercontent.com/composer/getcomposer.org/7b977730bcee2bea2a9581d0fca898b352c3cd74/web/installer -O - -q | php -- --quiet
++RUN cd vulnerabilities/api && ../../composer.phar install
++expose 80 443 3306
++CMD ["/entrypoint.sh"]
