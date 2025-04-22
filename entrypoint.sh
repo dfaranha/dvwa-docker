@@ -91,7 +91,7 @@ fi
 ### Start The mariadb server and populate the tables
 ###
 printf "Starting MariaDB locally \\n"
-mariadbd --defaults-file=/etc/mysql/mariadb.conf.d/50-server.cnf  &
+mariadbd --defaults-file=/etc/mysql/mariadb.conf.d/50-server.cnf --user=root &
 sleep 5
 printf "Initializing Database for DVWA \\n"
 mariadb -h localhost < /var/www/mysql_init.sql
